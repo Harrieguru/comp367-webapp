@@ -15,7 +15,11 @@ pipeline {
         stage('Build Maven') {
             steps {
                 script {
-                    sh 'mvn clean install'
+                    if (isUnix()) {
+                        sh 'mvn clean install'
+                    } else {
+                        bat 'mvn clean install'
+                    }
                 }
             }
         }
