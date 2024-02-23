@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'Maven3' 
+    }
+
     triggers {
         githubPush()
     }
@@ -15,8 +19,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    def mvnHome = tool 'Maven3' // Updated Maven tool name
-                    def mvnCMD = "${mvnHome}/bin/mvn"
+                    def mvnCMD = "mvn"
                     
                     // Build the Maven project
                     sh "${mvnCMD} clean install"
@@ -27,7 +30,7 @@ pipeline {
 
     post {
         success {
-            echo 'Build successful! '
+            echo 'Build successful!'
         }
     }
 }
