@@ -11,7 +11,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    def mvnHome = tool 'Maven'
+                    def mvnHome = tool 'Maven3' // Updated Maven tool name
                     def mvnCMD = "${mvnHome}/bin/mvn"
                     
                     // Build the Maven project
