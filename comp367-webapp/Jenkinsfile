@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    def mvnHome = tool 'Maven'
+                    def mvnCMD = "${mvnHome}/bin/mvn"
+                    
+                    // Build the Maven project
+                    sh "${mvnCMD} clean install"
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build successful! '
+        }
+    }
+}
