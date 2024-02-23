@@ -2,12 +2,7 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven3' 
-        git 'Default' 
-    }
-
-    triggers {
-        githubPush()
+        maven 'Maven3'
     }
 
     stages {
@@ -17,13 +12,11 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build Maven') {
             steps {
                 script {
-                    def mvnCMD = "mvn"
-                    
                     // Build the Maven project
-                    sh "${mvnCMD} clean install"
+                    sh 'mvn clean install'
                 }
             }
         }
