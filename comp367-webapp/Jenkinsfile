@@ -16,9 +16,9 @@ pipeline {
             steps {
                 script {
                     if (isUnix()) {
-                        sh 'mvn clean install'
+                        sh 'mvn -f comp367-webapp/pom.xml clean install'
                     } else {
-                        bat 'mvn clean install'
+                        bat 'mvn -f comp367-webapp/pom.xml clean install'
                     }
                 }
             }
