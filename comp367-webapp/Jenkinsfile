@@ -27,8 +27,11 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    // Build Docker image
-                    bat 'docker build -t comp367-webapp .'
+                    // Change directory to where the Dockerfile is located
+                    dir('comp367-webapp') {
+                        // Build Docker image
+                        bat 'docker build -t comp367-webapp .'
+                    }
                 }
             }
         }
