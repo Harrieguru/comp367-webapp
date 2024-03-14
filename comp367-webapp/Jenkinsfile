@@ -41,7 +41,9 @@ pipeline {
                 script {
                     // Login to Docker Hub using access token
                     withCredentials([string(credentialsId: 'dockerAccessToken', variable: 'DOCKER_ACCESS_TOKEN')]) {
-                        bat 'docker login -u _json_key -p %DOCKER_ACCESS_TOKEN% https://index.docker.io/v1/'
+                        docker.withRegistry('https://index.docker.io/v1/', 'DOCKER_ACCESS_TOKEN') {
+                            // No need to execute docker login command explicitly
+                        }
                     }
                 }
             }
