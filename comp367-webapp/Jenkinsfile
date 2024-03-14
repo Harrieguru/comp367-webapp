@@ -19,7 +19,7 @@ pipeline {
             steps {
                 // Generate code coverage reports with Jacoco
                 script {
-                    bat 'mvn jacoco:report'
+                    bat 'mvn -f comp367-webapp/pom.xml jacoco:report'
                 }
             }
         }
@@ -57,11 +57,9 @@ pipeline {
     post {
         success {
             echo 'Build successful!'
-            // Additional post-build actions if needed
         }
         failure {
             echo 'Build failed!'
-            // Additional post-build actions if needed
         }
     }
 }
