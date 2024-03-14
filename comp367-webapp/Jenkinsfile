@@ -2,32 +2,32 @@ pipeline {
     agent any
     
     stages {
-        stage('Checkout') {
+        stage('Checkout SCM') {
             steps {
                 checkout scm
             }
         }
         
-        stage('Build Maven Project') {
+        stage('Build Maven') {
             steps {
-                bat 'mvn clean package jacoco:report'
+                // Execute Maven clean and install commands
+                bat 'mvn -f comp367-webapp/pom.xml clean install'
             }
         }
         
         stage('Code Coverage') {
             steps {
-                jacoco(
-                    classPattern: '**/target/classes',
-                    execPattern: '**/target/jacoco/*.exec',
-                    sourcePattern: '**/src/main/java'
-                )
-                archiveArtifacts artifacts: 'target/site/jacoco/*'
+                // Generate code coverage reports with Jacoco
+                script {
+                    bat 'mvn jacoco:report'
+                }
             }
         }
         
         stage('Docker Build') {
             steps {
                 script {
+                    // Build Docker image
                     bat 'docker build -t comp367-webapp .'
                 }
             }
@@ -36,6 +36,7 @@ pipeline {
         stage('Docker Login') {
             steps {
                 script {
+                    // Login to Docker Hub using credentials
                     withCredentials([usernamePassword(credentialsId: 'dockerCredentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         bat 'docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%'
                     }
@@ -46,9 +47,21 @@ pipeline {
         stage('Docker Push') {
             steps {
                 script {
+                    // Push Docker image to Docker Hub
                     bat 'docker push comp367-webapp:latest'
                 }
             }
+        }
+    }
+    
+    post {
+        success {
+            echo 'Build successful!'
+            // Additional post-build actions if needed
+        }
+        failure {
+            echo 'Build failed!'
+            // Additional post-build actions if needed
         }
     }
 }
