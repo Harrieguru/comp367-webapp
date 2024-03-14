@@ -14,8 +14,7 @@ pipeline {
         }
         stage('Code Coverage') {
             steps {
-                // Publish JaCoCo code coverage report
-                jacoco()
+                jacoco(execPattern: '**/target/*.exec')
             }
         }
         stage('Docker Build') {
