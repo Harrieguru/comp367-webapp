@@ -45,7 +45,7 @@ pipeline {
                 script {
                     // Login to Docker Hub using secret text credential
                     withCredentials([string(credentialsId: 'credentialID', variable: 'DOCKER_PASSWORD')]) {
-                        bat 'docker login -u harrietatieno --password-stdin'
+                        bat 'docker login -u harrietatieno --password %DOCKER_PASSWORD%'
                     }
                 }
             }
