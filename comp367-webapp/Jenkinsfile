@@ -39,12 +39,11 @@ pipeline {
         stage('Docker Login') {
             steps {
                 script {
-                    // Login to Docker Hub using username and password credentials
+                    // Login to Docker Hub using credentials
                     withCredentials([usernamePassword(credentialsId: 'dockerCredentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        // Use --password-stdin to avoid exposing the password in the command
-                        // Escape the special character '$' in the password
-                        def escapedPassword = "\$${env.DOCKER_PASSWORD}"
-                        bat "echo $escapedPassword | docker login -u $DOCKER_USERNAME --password-stdin"
+                        docker.withRegistry('', 'DOCKER_USERNAME', 'DOCKER_PASSWORD') {
+                            // Docker login is automatically performed
+                        }
                     }
                 }
             }
