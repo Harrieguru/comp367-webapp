@@ -1,6 +1,10 @@
 pipeline {
     agent any
     
+    environment {
+        DOCKER_PASSWORD = credentials('credentialID')
+    }
+    
     stages {
         stage('Checkout SCM') {
             steps {
@@ -39,11 +43,9 @@ pipeline {
         stage('Docker Login') {
             steps {
                 script {
-                    // Login to Docker Hub using credentials
-                    withCredentials([usernamePassword(credentialsId: 'dockerCredentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        docker.withRegistry('', 'DOCKER_USERNAME', 'DOCKER_PASSWORD') {
-                            // Docker login is automatically performed
-                        }
+                    // Login to Docker Hub using secret text credential
+                    withCredentials([string(credentialsId: 'credentialID', variable: 'DOCKER_PASSWORD')]) {
+                        bat 'echo %DOCKER_PASSWORD% | docker login -u harrietatieno --password-stdin'
                     }
                 }
             }
