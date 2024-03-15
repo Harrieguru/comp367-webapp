@@ -3,7 +3,7 @@ pipeline {
     
     environment {
         DOCKER_PASSWORD = credentials('credentialID')
-        DOCKER_IMAGE_TAG = "harrietatieno/comp367-webapp:latest"
+        DOCKER_IMAGE_TAG = "harrietatieno/comp367-webapp:latest" 
     }
     
     stages {
@@ -34,8 +34,8 @@ pipeline {
                 script {
                     // Change directory to where the Dockerfile is located
                     dir('comp367-webapp') {
-                        // Build Docker image with correct tag
-                        bat 'docker build -t $DOCKER_IMAGE_TAG .'
+                        // Build Docker image with the specified tag
+                        bat "docker build -t $DOCKER_IMAGE_TAG ."
                     }
                 }
             }
@@ -46,7 +46,7 @@ pipeline {
                 script {
                     // Login to Docker Hub using secret text credential
                     withCredentials([string(credentialsId: 'credentialID', variable: 'DOCKER_PASSWORD')]) {
-                        bat 'docker login -u harrietatieno --password-stdin < $DOCKER_PASSWORD'
+                        bat 'docker login -u harrietatieno --password %DOCKER_PASSWORD%'
                     }
                 }
             }
@@ -55,8 +55,8 @@ pipeline {
         stage('Docker Push') {
             steps {
                 script {
-                    // Push Docker image to Docker Hub
-                    bat 'docker push $DOCKER_IMAGE_TAG'
+                    // Push Docker image to Docker Hub with the specified tag
+                    bat "docker push $DOCKER_IMAGE_TAG"
                 }
             }
         }
